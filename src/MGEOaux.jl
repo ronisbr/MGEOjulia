@@ -18,7 +18,7 @@ function checkDominance(mgeoData::MGEOStructure,
                         paretoFrontier::Array{ParetoPoint,1},
                         )
     addPoint = false
-    
+
     # If Pareto frontier is empty, then return true.
     if (length(paretoFrontier) == 0)
         push!(paretoFrontier, candidatePoint)
@@ -26,14 +26,14 @@ function checkDominance(mgeoData::MGEOStructure,
     end
 
     remove = Int64[]
-    
+
     # Loop through the entire list of Pareto points.
     for p=1:length(paretoFrontier)
         # Variable to check if the point in the Pareto frontier list is
         # dominated by the candidate.
         pointDominated = true
         candidateDominated = true
-        
+
         # Loop through objective functions.
         for i=1:mgeoData.nf
             # If both objective functions are equal (given mgeoEps), then
@@ -75,7 +75,7 @@ function checkDominance(mgeoData::MGEOStructure,
             addPoint = true
         end
     end
-    
+
     # Remove the points dominated by the candidate point.
     for i=1:length(remove)
         deleteat!(paretoFrontier, remove[i]-(i-1))
@@ -96,7 +96,7 @@ end
 # @date 2015-04-15
 #
 # @param[in] n The number of design variables.
-# @param[in] bits The number of bits for each variable.     
+# @param[in] bits The number of bits for each variable.
 # @param[in] min The minimum value for all design variables.
 # @param[in] max The maximum value for all design variables.
 #
@@ -108,7 +108,7 @@ function confDesignVars(n::Int64,
                         max::Float64)
     # Check if the number of bits are larger than 0.
     ( bits <= 0 ) && throw(MGEOArgumentError("The number of bits must not be 0."))
-        
+
     # Check if the min value is smaller than max.
     ( min >= max ) && throw(MGEOArgumentError("The minimum value must be less than the maximum value for a variable."))
 
@@ -119,8 +119,8 @@ function confDesignVars(n::Int64,
     fullscale = (1 << bits) - 1
 
     # Factors to convert the string to real numbers.
-    factors = 2.^[0:1:(bits-1)]
-    
+    factors = 2.^collect(0:1:(bits-1))
+
     for i=1:n
         designVariables[i] = DesignVariable(bits,
                                             min,
@@ -146,35 +146,35 @@ end
 # @param[in] varNames List containing the name of each design variable.
 #
 #==#
-     
+
 function confDesignVars{S<:String}(bits::Array{Int64,1},
                                    min::Array{Float64,1},
                                    max::Array{Float64,1},
                                    varNames::Array{S,1})
     # Check if the size of arrays is correct.
     n = length(bits)
-    
+
     ( ( length(min) != n ) ||
      ( length(max) != n ) ||
      ( length(varNames) != n ) ) && throw(ArgumentError)
-    
+
     # Number of bits.
     numBits = 0
-    
+
     # Create the array of design variables.
     designVariables = Array(DesignVariable, n)
 
-    for i=1:n
+    for i = 1:n
         # Check if the number of bits are larger than 0.
         ( bits[i] <= 0 ) && throw(MGEOArgumentError("The number of bits must not be 0."))
-        
+
         # Check if the min value is smaller than max.
         ( min[i] >= max[i] ) && throw(MGEOArgumentError("The minimum value must be less than the maximum value for a variable."))
-        
+
         designVariables[i] = DesignVariable(bits[i],
                                             min[i],
                                             max[i],
-                                            2.^[0:1:(bits[i]-1)],
+                                            2.^collect(0:1:(bits[i]-1)),
                                             (uint64(1) << bits[i]) - 1,
                                             numBits+1,
                                             varNames[i])
@@ -195,7 +195,7 @@ end
 # @param[in] max List containing the maximum of each design variable.
 #
 #==#
-     
+
 function confDesignVars(bits::Array{Int64,1},
                         min::Array{Float64,1},
                         max::Array{Float64,1})
@@ -264,7 +264,7 @@ end
 function pfToArray(paretoFrontier::Array{ParetoPoint,1})
     # Get the number of points.
     np = length(paretoFrontier)
-    
+
     # Get the number of variables.
     n = length(paretoFrontier[1].vars)
 
@@ -345,12 +345,12 @@ end
 function sortParetoFrontier(paretoFrontier::Array{ParetoPoint,1}, fobj::Int64)
     # Check the parameter.
     nf = length(paretoFrontier[1].f)
-    
+
     ( (fobj < 1) || (fobj > nf) ) && throw(MGEOArgumentError("fobj must be between 1 and the number of objective functions."))
 
     sort!(paretoFrontier, lt=(a,b)->begin
         # Check if data is valid.
         return (a.f[fobj] < b.f[fobj])
-    end        
+    end
           )
 end

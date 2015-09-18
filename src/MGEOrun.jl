@@ -17,7 +17,7 @@
 # where nf is the number of objective functions, n is the number of design
 # variables, and validPoint is a Boolean value that indicates if vars yield to a
 # valid point.
-# 
+#
 #==#
 
 function MGEOrun(mgeoData::MGEOStructure,
@@ -25,13 +25,13 @@ function MGEOrun(mgeoData::MGEOStructure,
                  showDebug::Bool = false)
     # Pareto frontier.
     paretoFrontier = ParetoPoint[]
-    
+
     # Maximum number of generations per run.
     ngenMaxPerRun = floor(mgeoData.ngenMax/mgeoData.runMax)
 
     # Get the number of design variables.
     numDesignVars = length(mgeoData.designVars)
-    
+
     # Get the number of bits the string must have by summing the bits for each
     # design variable.
     numBits = 0
@@ -41,25 +41,25 @@ function MGEOrun(mgeoData::MGEOStructure,
 
     # Create the string.
     string = BitArray(numBits)
-    
+
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     #                   Initialization of Pareto Frontier
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    
+
     # Initialize the string with one valid point in the Pareto Frontier.
     for run = 1:mgeoData.runMax
         # Sample a new string.
-        randbool!(string)
-        
+        rand!(string)
+
         # Convert string to real numbers.
         vars = convertStringToNumber(mgeoData.designVars, string)
-        
+
         # Call the objective functions.
         (valid, f) = f_obj(vars)
 
         # Check if the number of objective functions are valid.
         (length(f) != mgeoData.nf) && throw(MGEOArgumentError("The number of objective functions returned by f_obj is not equal to the one specified in mgeoData."))
-        
+
         if (valid)
             # Add the point to the Pareto Frontier.
             push!(paretoFrontier, ParetoPoint(vars, f))
@@ -88,24 +88,24 @@ function MGEOrun(mgeoData::MGEOStructure,
         end
 
         # Sample a new string if it is not the first run.
-        (run > 1) && randbool!(string)
-        
+        (run > 1) && rand!(string)
+
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         #                   Loop - MGEO Generations
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
         genDebug = 0
-        
+
         for ngenPerRun = 1:ngenMaxPerRun
             if (showDebug)
                 genDebug += 1
-                
+
                 if (genDebug >= 0.1*ngenMaxPerRun)
                     genDebug = 0
                     print("...$(ngenPerRun/ngenMaxPerRun*100)%")
                 end
             end
-            
+
             # Choose which objective function will be used to compute the
             # adaptability and to assemble the rank.
             chosenFunc = rand(1:mgeoData.nf)
@@ -115,21 +115,21 @@ function MGEOrun(mgeoData::MGEOStructure,
 
             # Array to sort the candidate points.
             fRank = Array(sRank,numBits)
-                       
+
             # Flip each bit.
             for i = 1:numBits
                 string[i] = !string[i]
 
                 # Convert string to real numbers.
                 vars = convertStringToNumber(mgeoData.designVars, string)
-                
+
                 # Compute the objective functions.
                 (valid, f) = f_obj(vars)
-                
+
                 if (valid)
                     # Create the candidate point.
                     candidatePoint = ParetoPoint(vars, f)
-                    
+
                     # Add the result to the rank.
                     fRank[i] = sRank(true, i, f[chosenFunc])
                     candidatePoints[i] = candidatePoint
@@ -149,7 +149,7 @@ function MGEOrun(mgeoData::MGEOStructure,
                     checkDominance(mgeoData, candidatePoints[i], paretoFrontier)
                 end
             end
-            
+
             # If there are no valid points, an independent run must be called.
             if (numValidPoints == 0)
                 break
@@ -159,7 +159,7 @@ function MGEOrun(mgeoData::MGEOStructure,
             # ------------------------------------------------------------------
             # The points will be ranked according to the selected objective
             # function (chosenFunc).
-            # 
+            #
             # Notice that the invalid points will be placed after the valid
             # ones.
 
@@ -174,7 +174,7 @@ function MGEOrun(mgeoData::MGEOStructure,
                 end
             end
                   )
-            
+
             # Choose a bit to be changed for the new generation.
             bitAccepted = false
 
@@ -203,6 +203,6 @@ function MGEOrun(mgeoData::MGEOStructure,
             println("")
         end
     end
-        
+
     paretoFrontier
 end
