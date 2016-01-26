@@ -50,7 +50,7 @@ function f_obj3(vars::Array{Float64,1})
     else
         f[1] = -4.0+x1
     end
-        
+
     f[2] = (x1-5)*(x1-5);
 
     (true, f)
@@ -70,7 +70,7 @@ end
 # Test cases
 ################################################################################
 
-testcase = 2
+testcase = 5
 
 if (testcase == 1)
 
@@ -79,7 +79,7 @@ if (testcase == 1)
     @time pf = MGEOrun(mgeoData, f_obj1, true)
     sortParetoFrontier(pf, 1)
     savePFtoCSV("testcase_01.csv",designVars, pf)
-    
+
 elseif (testcase == 2)
 
     designVars = confDesignVars(1, 16, -10.0, +10.0)
@@ -87,7 +87,7 @@ elseif (testcase == 2)
     @time pf = MGEOrun(mgeoData, f_obj2, true)
     sortParetoFrontier(pf, 1)
     savePFtoCSV("testcase_02.csv",designVars, pf)
-    
+
 elseif (testcase == 3)
 
     designVars = confDesignVars(1, 16, -10.0, +10.0)
@@ -95,7 +95,7 @@ elseif (testcase == 3)
     @time pf = MGEOrun(mgeoData, f_obj3, true)
     sortParetoFrontier(pf, 1)
     savePFtoCSV("testcase_03.csv",designVars, pf)
-    
+
 elseif (testcase == 4)
 
     designVars = confDesignVars(2, 8, -10.0, +10.0)
@@ -103,7 +103,15 @@ elseif (testcase == 4)
     @time pf = MGEOrun(mgeoData, f_obj4, true)
     sortParetoFrontier(pf, 1)
     savePFtoCSV("testcase_04.csv",designVars, pf)
-    
+
+elseif (testcase == 5)
+
+    designVars = confDesignVars([16], [-10.0], [+10.0],["Design Variable"])
+    mgeoData = MGEOStructure(2, 0.5, 8000, 50, designVars, 1e-10)
+    @time pf = MGEOrun(mgeoData, f_obj2, true)
+    sortParetoFrontier(pf, 1)
+    savePFtoCSV("testcase_05.csv",designVars, pf)
+
 else
     println("Invalid test case.")
-end 
+end

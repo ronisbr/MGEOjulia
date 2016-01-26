@@ -29,7 +29,7 @@ type DesignVariable
     # Index in the string.
     index::Int64
     # Name of the variable.
-    name::String
+    name::AbstractString
 end
 
 """
@@ -90,7 +90,7 @@ end
 
 # Exception: Invalid arguments.
 type MGEOArgumentError <: Exception
-    msg::String
+    msg::AbstractString
 end
 Base.showerror(io::IO, e::MGEOArgumentError) =
     print(io, e.msg)

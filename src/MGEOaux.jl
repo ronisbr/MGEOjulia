@@ -149,7 +149,7 @@ function confDesignVars(n::Int64,
 end
 
 """
-### function confDesignVars{S<:String}(bits::Array{Int64,1}, min::Array{Float64,1}, max::Array{Float64,1}, varNames::Array{S,1})
+### function confDesignVars{S<:AbstractString}(bits::Array{Int64,1}, min::Array{Float64,1}, max::Array{Float64,1}, varNames::Array{S,1})
 
 Configure the design variables.
 
@@ -167,10 +167,10 @@ Configure the design variables.
 
 """
 
-function confDesignVars{S<:String}(bits::Array{Int64,1},
-                                   min::Array{Float64,1},
-                                   max::Array{Float64,1},
-                                   varNames::Array{S,1})
+function confDesignVars{S<:AbstractString}(bits::Array{Int64,1},
+                                           min::Array{Float64,1},
+                                           max::Array{Float64,1},
+                                           varNames::Array{S,1})
     # Check if the size of arrays is correct.
     n = length(bits)
 
@@ -195,7 +195,7 @@ function confDesignVars{S<:String}(bits::Array{Int64,1},
                                             min[i],
                                             max[i],
                                             2.^collect(0:1:(bits[i]-1)),
-                                            (uint64(1) << bits[i]) - 1,
+                                            (UInt64(1) << bits[i]) - 1,
                                             numBits+1,
                                             varNames[i])
         numBits += bits[i]
@@ -226,7 +226,7 @@ function confDesignVars(bits::Array{Int64,1},
                         min::Array{Float64,1},
                         max::Array{Float64,1})
     # Create an array with variable names.
-    varNames = Array(String, length(bits))
+    varNames = Array(AbstractString, length(bits))
 
     for i=1:length(varNames)
         varNames[i] = "Var. $i"
@@ -327,7 +327,7 @@ function pfToArray(paretoFrontier::Array{ParetoPoint,1})
 end
 
 """
-### function savePFtoCSV{S<:String}(filename::S, designVars::Array{DesignVariable,1}, paretoFrontier::Array{ParetoPoint,1})
+### function savePFtoCSV{S<:AbstractString}(filename::S, designVars::Array{DesignVariable,1}, paretoFrontier::Array{ParetoPoint,1})
 
 Save the Pareto frontier to a CSV file.
 
@@ -353,9 +353,9 @@ functions.
 
 """
 
-function savePFtoCSV{S<:String}(filename::S,
-                                designVars::Array{DesignVariable,1},
-                                paretoFrontier::Array{ParetoPoint,1})
+function savePFtoCSV{S<:AbstractString}(filename::S,
+                                        designVars::Array{DesignVariable,1},
+                                        paretoFrontier::Array{ParetoPoint,1})
     # Convert Pareto frontier.
     pfArray = pfToArray(paretoFrontier)
 
@@ -366,14 +366,14 @@ function savePFtoCSV{S<:String}(filename::S,
     nf = size(pfArray,2) - N
 
     # Array of variable names.
-    varNames = Array(String, N)
+    varNames = Array(AbstractString, N)
 
     for i = 1:N
         varNames[i] = designVars[i].name
     end
 
     # Array of function names.
-    funcNames = Array(String, nf)
+    funcNames = Array(AbstractString, nf)
 
     for i = 1:nf
         funcNames[i] = "Obj. Func. $i"
