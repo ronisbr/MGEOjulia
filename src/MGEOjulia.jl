@@ -8,9 +8,13 @@ export MGEOrun
 #                                  Structures
 ################################################################################
 
-#==#
-# @brief Structure that defines the limits of the design variables.
-#==#
+"""
+### type DesignVariable
+
+Structure that defines the limits of the design variables.
+
+"""
+
 type DesignVariable
     # Number of bits.
     bits::Int64
@@ -28,9 +32,13 @@ type DesignVariable
     name::String
 end
 
-#==#
-# @brief Structure that defines a point in the Pareto frontier.
-#==#
+"""
+### type ParetoPoint
+
+Structure that defines a point in the Pareto frontier.
+
+"""
+
 type ParetoPoint
     # Design variables.
     vars::Array{Float64,1}
@@ -38,9 +46,13 @@ type ParetoPoint
     f::Array{Float64, 1}
 end
 
-#==#
-# @brief Structure used to sort the candidate points.
-#==#
+"""
+### type sRank
+
+Structure used to sort the candidate points.
+
+"""
+
 type sRank
     # Is the value valid?
     valid::Bool
@@ -50,9 +62,13 @@ type sRank
     f::Float64
 end
 
-#==#
-# @brief Structure to store the configuration of MGEO.
-#==#
+"""
+### type MGEOStructure
+
+Structure to store the configuration of MGEO.
+
+"""
+
 type MGEOStructure
     # Number of objective functions.
     nf::Int64
@@ -66,7 +82,7 @@ type MGEOStructure
     designVars::Array{DesignVariable,1}
     # Epsilon to compare objective functions.
     mgeoEps::Float64
-end    
+end
 
 ################################################################################
 #                                  Exceptions

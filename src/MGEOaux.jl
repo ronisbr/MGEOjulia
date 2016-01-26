@@ -1,17 +1,25 @@
-#==#
-#
-# @brief Check the dominance of a Pareto point.
-# @author Ronan Arraes Jardim Chagas
-# @date 2015-04-03
-#
-# @param[in] mgeoData Structure with the configuration of MGEO.
-# @param[in] candidatePoint Candidate point to be added in the frontier.
-# @param[inout] paretoFrontier Pareto frontier.
-#
-# @retval TRUE The candidate point was added to the list.
-# @retval FALSE The candidate point was not added to the list.
-#
-#==#
+"""
+### function checkDominance(mgeoData::MGEOStructure, candidatePoint::ParetoPoint, paretoFrontier::Array{ParetoPoint,1})
+
+Check the dominance of a Pareto point.
+
+##### Args
+
+* mgeoData: Structure with the configuration of MGEO.
+* candidatePoint: Candidate point to be added in the frontier.
+* paretoFrontier: (INPUT/OUTPUT) Pareto frontier.
+
+##### Returns
+
+* **TRUE**: The candidate point was added to the list.
+* **FALSE**: The candidate point was not added to the list.
+
+##### Info
+
+* **Author**: Ronan Arraes Jardim Chagas
+* **Date**: 2015-04-03
+
+"""
 
 function checkDominance(mgeoData::MGEOStructure,
                         candidatePoint::ParetoPoint,
@@ -89,18 +97,24 @@ function checkDominance(mgeoData::MGEOStructure,
     addPoint
 end
 
-#==#
-#
-# @brief Configure the design variables.
-# @author Ronan Arraes Jardim Chagas
-# @date 2015-04-15
-#
-# @param[in] n The number of design variables.
-# @param[in] bits The number of bits for each variable.
-# @param[in] min The minimum value for all design variables.
-# @param[in] max The maximum value for all design variables.
-#
-#==#
+"""
+### function confDesignVars(n::Int64, bits::Int64, min::Float64, max::Float64)
+
+Configure the design variables.
+
+##### Args
+
+* n: The number of design variables.
+* bits: The number of bits for each variable.
+* min: The minimum value for all design variables.
+* max: The maximum value for all design variables.
+
+##### Info
+
+* **Author**: Ronan Arraes Jardim Chagas
+* **Date**: 2015-04-15
+
+"""
 
 function confDesignVars(n::Int64,
                         bits::Int64,
@@ -134,18 +148,24 @@ function confDesignVars(n::Int64,
     designVariables
 end
 
-#==#
-#
-# @brief Configure the design variables.
-# @author Ronan Arraes Jardim Chagas
-# @date 2015-04-15
-#
-# @param[in] bits List containing the number of bits for each design variable.
-# @param[in] min List containing the minimum of each design variable.
-# @param[in] max List containing the maximum of each design variable.
-# @param[in] varNames List containing the name of each design variable.
-#
-#==#
+"""
+### function confDesignVars{S<:String}(bits::Array{Int64,1}, min::Array{Float64,1}, max::Array{Float64,1}, varNames::Array{S,1})
+
+Configure the design variables.
+
+##### Args
+
+* bits: List containing the number of bits for each design variable.
+* min: List containing the minimum of each design variable.
+* max: List containing the maximum of each design variable.
+* varNames: List containing the name of each design variable.
+
+##### Info
+
+* **Author**: Ronan Arraes Jardim Chagas
+* **Date**: 2015-04-15
+
+"""
 
 function confDesignVars{S<:String}(bits::Array{Int64,1},
                                    min::Array{Float64,1},
@@ -184,17 +204,23 @@ function confDesignVars{S<:String}(bits::Array{Int64,1},
      designVariables
 end
 
-#==#
-#
-# @brief Configure the design variables.
-# @author Ronan Arraes Jardim Chagas
-# @date 2015-04-15
-#
-# @param[in] bits List containing the number of bits for each design variable.
-# @param[in] min List containing the minimum of each design variable.
-# @param[in] max List containing the maximum of each design variable.
-#
-#==#
+"""
+### function confDesignVars(bits::Array{Int64,1}, min::Array{Float64,1}, max::Array{Float64,1})
+
+Configure the design variables.
+
+##### Args
+
+* bits: List containing the number of bits for each design variable.
+* min: List containing the minimum of each design variable.
+* max: List containing the maximum of each design variable.
+
+##### Info
+
+* **Author**: Ronan Arraes Jardim Chagas
+* **Date**: 2015-04-15
+
+"""
 
 function confDesignVars(bits::Array{Int64,1},
                         min::Array{Float64,1},
@@ -209,19 +235,27 @@ function confDesignVars(bits::Array{Int64,1},
     confDesignVars(bits, min, max, varNames)
 end
 
-#==#
-#
-# @brief Convert the string to real values.
-# @author Ronan Arraes Jardim Chagas
-# @date 2015-04-15
-#
-# @param[in] string String.
-# @param[in] designVars Array with the description of design variables.
-#
-# @return Array(Float64,n) with the real value of the design variables, where n
-# is the number of design variables.
-#
-#==#
+"""
+### function convertStringToNumber(designVars::Array{DesignVariable,1}, string::BitArray{1})
+
+Convert the string to real values.
+
+##### Args
+
+* string: String.
+* designVars: Array with the description of design variables.
+
+##### Returns
+
+* **Array(Float64,n)** with the real value of the design variables, where *n* is
+the number of design variables.
+
+##### Info
+
+* **Author**: Ronan Arraes Jardim Chagas
+* **Date**: 2015-04-15
+
+"""
 
 function convertStringToNumber(designVars::Array{DesignVariable,1},
                                string::BitArray{1})
@@ -246,20 +280,30 @@ function convertStringToNumber(designVars::Array{DesignVariable,1},
     vars
 end
 
-#==#
-#
-# @brief Convert the structure that stores the Pareto frontier to an array.
-# @author Ronan Arraes Jardim Chagas
-# @date 2015-04-30
-#
-# @param[in] paretoFrontier Pareto frontier.
-#
-# @retun Array{Float64,2} in which the i-th line of the array is
-#     [var[1] var[2] ... var[n] f[1] f[2] ... f[nf]],
-# where n is the number of design variables and nf is the number of objective
-# functions.
-#
-#==#
+"""
+### function pfToArray(paretoFrontier::Array{ParetoPoint,1})
+
+Convert the structure that stores the Pareto frontier to an array.
+
+##### Args
+
+* paretoFrontier: Pareto frontier.
+
+##### Returns
+
+* **Array{Float64,2}** in which the i-th line of the array is
+
+    [var[1] var[2] ... var[n] f[1] f[2] ... f[nf]],
+
+  where *n* is the number of design variables and *nf* is the number of
+  objective functions.
+
+##### Info
+
+* **Author**: Ronan Arraes Jardim Chagas
+* **Date**: 2015-04-30
+
+"""
 
 function pfToArray(paretoFrontier::Array{ParetoPoint,1})
     # Get the number of points.
@@ -282,24 +326,32 @@ function pfToArray(paretoFrontier::Array{ParetoPoint,1})
     pfArray
 end
 
-#==#
-#
-# @brief Save the Pareto frontier to a CSV file.
-# @author Ronan Arraes Jardim Chagas
-# @date 2015-05-03
-#
-# @param[in] filename File name.
-# @param[in] paretoFrontier Pareto frontier.
-# @param[in] designVars Array with the description of design variables.
-#
-# @remarks The output file will have the following structure
-#
-#     var[1],var[2],...,var[n],f[1],f[2],...,f[nf],
-#
-# where n is  the number of design variables and nf is the number of objective
-# functions.
-#
-#==#
+"""
+### function savePFtoCSV{S<:String}(filename::S, designVars::Array{DesignVariable,1}, paretoFrontier::Array{ParetoPoint,1})
+
+Save the Pareto frontier to a CSV file.
+
+##### Args
+
+* filename: File name.
+* paretoFrontier: Pareto frontier.
+* designVars: Array with the description of design variables.
+
+##### Remarks
+
+The output file will have the following structure
+
+        var[1],var[2],...,var[n],f[1],f[2],...,f[nf]
+
+where *n* is the number of design variables and *nf* is the number of objective
+functions.
+
+##### Info
+
+* **Author**: Ronan Arraes Jardim Chagas
+* **Date**: 2015-05-03
+
+"""
 
 function savePFtoCSV{S<:String}(filename::S,
                                 designVars::Array{DesignVariable,1},
@@ -331,16 +383,22 @@ function savePFtoCSV{S<:String}(filename::S,
     writedlm(filename, [ [varNames' funcNames']; pfArray], ",")
 end
 
-#==#
-#
-# @brief Sort the points in the Pareto Frontier.
-# @author Ronan Arraes Jardim Chagas
-# @date 2015-04-30
-#
-# @param[inout] paretoFrontier Pareto frontier.
-# @param[in] fobj Function to sort.
-#
-#==#
+"""
+### function sortParetoFrontier(paretoFrontier::Array{ParetoPoint,1}, fobj::Int64)
+
+Sort the points in the Pareto Frontier.
+
+##### Args
+
+* paretoFrontier: (INPUT/OUTPUT) Pareto frontier.
+* fobj: Function to sort.
+
+##### Info
+
+* **Author**: Ronan Arraes Jardim Chagas
+* **Date**: 2015-04-30
+
+"""
 
 function sortParetoFrontier(paretoFrontier::Array{ParetoPoint,1}, fobj::Int64)
     # Check the parameter.

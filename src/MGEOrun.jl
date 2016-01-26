@@ -1,24 +1,33 @@
-#==#
-#
-# @brief Run the MGEO.
-# @author Ronan Arraes Jardim Chagas
-# @date 2015-04-30
-#
-# @param[in] mgeoData Structure with the configuration of MGEO.
-# @param[in] f_obj Objective function.
-# @param[in] showDebug Print debug information.
-#
-# @remark The objective function must have the following signature
-#     function f_obj(vars)
-#         1) Compute f[1], f[2], ..., f[nf] using vars[1], vars[2], ... var[n]
-#         1) return (validPoint, f)
-#     end
-#
-# where nf is the number of objective functions, n is the number of design
-# variables, and validPoint is a Boolean value that indicates if vars yield to a
-# valid point.
-#
-#==#
+"""
+### function MGEOrun(mgeoData::MGEOStructure, f_obj::Function, showDebug::Bool = false)
+
+Run the MGEO.
+
+##### Args
+
+* mgeoData: Structure with the configuration of MGEO.
+* f_obj: Objective function.
+* showDebug: Print debug information.
+
+##### Remarks
+
+The objective function must have the following signature
+
+        function f_obj(vars)
+            1) Compute f[1], f[2], ..., f[nf] using vars[1], vars[2], ... var[n]
+            2) return (validPoint, f)
+        end
+
+where nf is the number of objective functions, n is the number of design
+variables, and validPoint is a Boolean value that indicates if vars yield to a
+valid point.
+
+##### Info
+
+* **Author**: Ronan Arraes Jardim Chagas
+* **Date**: 2015-04-30
+
+"""
 
 function MGEOrun(mgeoData::MGEOStructure,
                  f_obj::Function,
