@@ -18,7 +18,7 @@ using MGEOjulia
 # Objective functions
 ################################################################################
 
-function f_obj1(vars::Array{Float64,1})
+@everywhere function f_obj1(vars::Array{Float64,1})
     x1 = vars[1]
 
     f = [exp(-x1) + 1.4*exp(-x1*x1);
@@ -27,7 +27,7 @@ function f_obj1(vars::Array{Float64,1})
     (true, f)
 end
 
-function f_obj2(vars::Array{Float64,1})
+@everywhere function f_obj2(vars::Array{Float64,1})
     x1 = vars[1]
 
     f = [x1*x1;
@@ -36,7 +36,7 @@ function f_obj2(vars::Array{Float64,1})
     (true, f)
 end
 
-function f_obj3(vars::Array{Float64,1})
+@everywhere function f_obj3(vars::Array{Float64,1})
     x1 = vars[1]
 
     f = Array(Float64, 2)
@@ -56,7 +56,7 @@ function f_obj3(vars::Array{Float64,1})
     (true, f)
 end
 
-function f_obj4(vars::Array{Float64,1})
+@everywhere function f_obj4(vars::Array{Float64,1})
     x = vars[1]
     y = vars[2]
 

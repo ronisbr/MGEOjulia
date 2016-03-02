@@ -1,4 +1,4 @@
-using MGEOJulia
+using MGEOjulia
 using Base.Test
 
 # write your own tests here

@@ -84,6 +84,11 @@ function MGEOrun(mgeoData::MGEOStructure,
     # String.
     string = BitArray(numBits)
 
+    # Number of available processes.
+    np = nprocs()
+    i  = 1
+    nextidx() = (idx = i; i+=1; idx)
+
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     #                       Loop - Independent Runs
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -125,28 +130,42 @@ function MGEOrun(mgeoData::MGEOStructure,
             # Array to sort the candidate points.
             fRank = Array(sRank,numBits)
 
-            # Flip each bit.
-            for i = 1:numBits
-                string[i] = !string[i]
+            i = 1
 
-                # Convert string to real numbers.
-                vars = convertStringToNumber(mgeoData.designVars, string)
+            # Evaluate the objective functions using parallel computing.
+            @sync begin
+                for p = 1:np
+                    if p != myid() || np == 1
+                        @async begin
+                            while true
+                                idx = nextidx()
 
-                # Compute the objective functions.
-                (valid, f) = f_obj(vars)
+                                if idx > numBits
+                                    break
+                                end
 
-                if (valid)
-                    # Create the candidate point.
-                    candidatePoint = ParetoPoint(vars, f)
+                                string[idx] = !string[idx]
+                                vars = convertStringToNumber(
+                                    mgeoData.designVars, string)
 
-                    # Add the result to the rank.
-                    fRank[i] = sRank(true, i, f[chosenFunc])
-                    candidatePoints[i] = candidatePoint
-                else
-                    fRank[i] = sRank(false, i, 0.0)
+                                # Evaluate the objective functions.
+                                (valid, f) = remotecall_fetch(p, f_obj, vars)
+
+                                # Check if the solution is valid.
+                                if (valid)
+                                    # Create the candidate point.
+                                    candidatePoint = ParetoPoint(vars, f)
+
+                                    # Add the result to the rank.
+                                    fRank[idx] = sRank(true, idx, f[chosenFunc])
+                                    candidatePoints[idx] = candidatePoint
+                                else
+                                    fRank[idx] = sRank(false, idx, 0.0)
+                                end
+                            end
+                        end
+                    end
                 end
-
-                string[i] = !string[i]
             end
 
             # Add the points to the Pareto frontier.
