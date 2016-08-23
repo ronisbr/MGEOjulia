@@ -79,7 +79,8 @@ For more information, see the example file
 Julia version
 -------------
 
-Only julia v0.3 is officially supported.
+The package is tested against julia **v0.5**, but it should also work in julia
+**v0.4**.
 
 License
 -------
@@ -126,4 +127,4 @@ in Engineering: Theory and Practice*, Cambridge, UK, 2005.
 Selection Tool for Satellite Constellations Using the Multiobjective Generalized
 Extremal Optimization (MGEO) Algorithm**", in *6th International Conference on
 Systems & Concurrent Engineering for Space Applications*, Stuttgart, Germany,
-2014 (*in press*).
+2014.
