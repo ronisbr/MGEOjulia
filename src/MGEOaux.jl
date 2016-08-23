@@ -380,7 +380,8 @@ function savePFtoCSV{S<:AbstractString}(filename::S,
     end
 
     # Write the information to the file.
-    writedlm(filename, [ [varNames' funcNames']; pfArray], ",")
+    writedlm(filename, [ [reshape(varNames,  1, N) reshape(funcNames, 1, nf) ];
+                         pfArray ], ",")
 end
 
 """

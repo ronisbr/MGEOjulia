@@ -149,7 +149,7 @@ function MGEOrun(mgeoData::MGEOStructure,
                                     mgeoData.designVars, string)
 
                                 # Evaluate the objective functions.
-                                (valid, f) = remotecall_fetch(p, f_obj, vars)
+                                (valid, f) = remotecall_fetch(f_obj, p, vars)
 
                                 # Check if the solution is valid.
                                 if (valid)
